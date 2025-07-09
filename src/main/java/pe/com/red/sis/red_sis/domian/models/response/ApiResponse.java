@@ -1,46 +1,30 @@
 package pe.com.red.sis.red_sis.domian.models.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
+
+import java.util.List;
 
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ApiResponse<T> {
-
-    @JsonProperty("data")
     private T data;
+    private Paginate paginate;
+    private List<String> errors;
 
-    @JsonProperty("paginate")
-    private Object paginate;
-
-    @JsonProperty("errors")
-    private Object errors;
-
-    public ApiResponse(T data){
-        this.data = data;
+    public static <T> ApiResponse<T> of(T data) {
+        return ApiResponse.<T>builder().data(data).build();
     }
 
-    public ApiResponse(T data, Object paginate){
-        this.data = data;
-        this.paginate = paginate;
-
+    public static <T> ApiResponse<T> of(T data, Paginate paginate) {
+        return ApiResponse.<T>builder().data(data).paginate(paginate).build();
     }
 
-    public ApiResponse(T data, Object paginate, Object errors){
-        this.data = data;
-        this.paginate = paginate;
-        this.errors = errors;
+    public static <T> ApiResponse<T> error(List<String> errors) {
+        return ApiResponse.<T>builder().errors(errors).build();
     }
-
-    public ApiResponse(T data, Paginate paginate){
-        this.data = data;
-        this.paginate = paginate;
-
-    }
-
-    public ApiResponse(Paginate paginate){
-        this.paginate = paginate;
-    }
-
 }

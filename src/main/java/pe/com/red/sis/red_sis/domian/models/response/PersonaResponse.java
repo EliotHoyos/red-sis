@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 
 @SuperBuilder
 @Getter
@@ -16,6 +18,6 @@ public class PersonaResponse {
     private String nombresPersona;
     private String apellidoPaternoPersona;
     private String apellidoMaternoPersona;
-    private String fechaNacimientoPersona;
+    private LocalDate fechaNacimientoPersona;
 
 }

@@ -61,13 +61,14 @@ Este proyecto está diseñado para el **Sistema Integrado de Salud** con el fin 
 
 ## ⚙️ Uso
 
-* **Endpoint base**: `http://localhost:8080/api/fuas`
+* **Endpoint base**: `http://localhost:8080/api/personas`
 * **Documentación interactiva (Swagger UI)**: `http://localhost:8080/swagger-ui.html`
 
 **Pruebas con Postman**:
 
-1. Importar la colección `postman_collection.json` (incluida en el repositorio).
-2. Ejecutar los requests para crear, leer, actualizar y eliminar FUAS.
+1. Ejecuta la aplicación con `mvn spring-boot:run`.
+2. Envía una petición GET a `http://localhost:8080/api/personas` para obtener todas las personas.
+3. Para paginar, usa `http://localhost:8080/api/personas/paginate?page=0&size=10`.
 
 ---
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import pe.com.red.sis.red_sis.aplication.ports.output.PersonaRepositoryPort;
 import pe.com.red.sis.red_sis.domian.models.response.Paginate;
 import pe.com.red.sis.red_sis.domian.models.response.PersonaResponse;
@@ -15,33 +16,24 @@ import pe.com.red.sis.red_sis.infrastructure.repository.mapper.PersonaMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class PersonaRepositoryAdapter implements PersonaRepositoryPort {
 
-    private final PersonaJpaRepository personaJpaRepository;
-    private final PersonaMapper personaMapper;
-    private final PaginateMapper paginateMapper;
+    private final PersonaJpaRepository jpaRepository;
+    private final PersonaMapper mapper;
 
 
     @Override
     public List<PersonaResponse> getList() {
-        return personaJpaRepository.findAll().stream()
-                .map(personaMapper::toResponse)
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Page<PersonaResponse> getPagination(String search, Pageable pageable) {
-        Page<PersonaEntity> page = personaJpaRepository.findAll(pageable);
-        List<PersonaResponse> content = page.getContent().stream()
-                .map(personaMapper::toResponse)
-                .collect(Collectors.toList());
-        Paginate meta = paginateMapper.toPaginate(page);
-        return (Page<PersonaResponse>) Paginate.builder()
-                .currentPage(meta.getCurrentPage())
-                .totalPages(meta.getTotalPages())
-                .totalElements(meta.getTotalElements())
-                .build();
+        Page<PersonaEntity> page = jpaRepository.findByNombreContainingIgnoreCase(search, pageable);
+        return page.map(mapper::toDto);
     }
 }

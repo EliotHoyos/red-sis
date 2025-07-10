@@ -1,30 +1,30 @@
 package pe.com.red.sis.red_sis.domian.models.response;
 
 import lombok.Getter;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Builder;
 
-import java.util.List;
+import java.time.Instant;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class ApiResponse<T> {
-    private T data;
-    private Paginate paginate;
-    private List<String> errors;
+    private final boolean success;
+    private final Instant timestamp;
+    private final T        data;
 
     public static <T> ApiResponse<T> of(T data) {
-        return ApiResponse.<T>builder().data(data).build();
+        return ApiResponse.<T>builder()
+                .success(true)
+                .timestamp(Instant.now())
+                .data(data)
+                .build();
     }
 
-    public static <T> ApiResponse<T> of(T data, Paginate paginate) {
-        return ApiResponse.<T>builder().data(data).paginate(paginate).build();
-    }
-
-    public static <T> ApiResponse<T> error(List<String> errors) {
-        return ApiResponse.<T>builder().errors(errors).build();
+    public static <T> ApiResponse<T> ofError(T error) {
+        return ApiResponse.<T>builder()
+                .success(false)
+                .timestamp(Instant.now())
+                .data(error)
+                .build();
     }
 }

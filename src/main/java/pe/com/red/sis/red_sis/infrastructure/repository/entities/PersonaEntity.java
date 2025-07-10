@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "ApiPersona", schema = "dbo")
+@Table(name = "api_persona", schema = "dbo")
 public class PersonaEntity {
 
     @Id

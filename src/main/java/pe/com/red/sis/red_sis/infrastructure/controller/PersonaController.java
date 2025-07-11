@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pe.com.red.sis.red_sis.aplication.ports.input.PersonaUseCase;
 import pe.com.red.sis.red_sis.domian.models.response.ApiResponse;
-import pe.com.red.sis.red_sis.domian.models.response.Paginate;
 import pe.com.red.sis.red_sis.domian.models.response.PersonaResponse;
 
 import java.util.List;
@@ -23,12 +22,21 @@ public class PersonaController {
 
     private final PersonaUseCase personaUseCase;
 
-    @GetMapping("/paginate")
-    public ResponseEntity<ApiResponse<Page<PersonaResponse>>> paginate(
-            @RequestParam(defaultValue = "") String search,
-            Pageable pageable) {
-        Page<PersonaResponse> page = personaUseCase.getPagination(search, pageable);
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<PersonaResponse>>> listPersonas() {
+        List<PersonaResponse> page = personaUseCase.getList();
         return ResponseEntity.ok(ApiResponse.of(page));
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<ApiResponse<Page<PersonaResponse>>> listPersonasPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PersonaResponse> result = personaUseCase.getPagination(search, pageable);
+        return ResponseEntity.ok(ApiResponse.of(result));
     }
 
 }
